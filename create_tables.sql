@@ -34,14 +34,14 @@ CREATE TABLE item (
     price DECIMAL(10, 2) NOT NULL,
     item_photo TEXT, 
     description TEXT, 
-    unit_id INT REFERENCES unit (id)
+    unit_id INT REFERENCES unit (id) NOT NULL
 );
 
 -- green area
 CREATE TABLE city (
     id SERIAL PRIMARY KEY,
-    city_name VARCHAR(128), 
-    postal_code VARCHAR(16)
+    city_name VARCHAR(128) NOT NULL, 
+    postal_code VARCHAR(16) NOT NULL
 );
 
 CREATE TABLE customer (
