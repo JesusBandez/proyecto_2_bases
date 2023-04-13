@@ -137,6 +137,7 @@ DECLARE
 	code VARCHAR;
 	email VARCHAR;
 	phone_number VARCHAR;
+	city_id INTEGER;
 BEGIN
 	
 	--insertar Customers
@@ -183,6 +184,16 @@ BEGIN
 		ORDER BY random()
 		LIMIT 1;
 		
+		--choose city_id
+		SELECT id INTO city_id
+		FROM city
+		Where city_name = (
+			Select city
+			FROM city_aux
+			ORDER BY pupulation*random() DESC
+			LIMIT 1
+		);
+		
 		INSERT INTO Customer (
 			first_name, last_name, user_name, password, time_inserted, 
 		 	confirmation_code, time_confirmed, contact_email, contact_phone, 
@@ -190,7 +201,7 @@ BEGIN
 		)
 		VALUES (
 			nombreCliente, apellidoCliente, username, pw, time_inserted, 
-			code, time_confirmed, email, phone_number, 37, 'hola', 37, 'hola'
+			code, time_confirmed, email, phone_number, city_id, 'hola', city_id, 'hola'
 		);
 	END LOOP;
 
