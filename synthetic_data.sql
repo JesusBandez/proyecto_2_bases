@@ -23,7 +23,7 @@ CREATE TABLE street_aux (
 \copy city_aux FROM 'filtered_data_cities.csv' WITH DELIMITER ',' CSV HEADER;
 \copy last_name FROM 'filtered_data_names.csv' WITH DELIMITER ',' CSV HEADER;
 \copy first_name FROM 'names.csv' WITH DELIMITER ',' CSV HEADER;
-\copy street_aux FROM 'strrets.csv' WITH DELIMITER ',' CSV HEADER;
+\copy street_aux FROM 'streets.csv' WITH DELIMITER ',' CSV HEADER;
 
 -- llenar tabla city
 INSERT INTO city (city_name, postal_code)
