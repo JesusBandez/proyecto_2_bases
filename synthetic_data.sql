@@ -138,6 +138,7 @@ DECLARE
 	email VARCHAR;
 	phone_number VARCHAR;
 	city_id INTEGER;
+	calle VARCHAR;
 BEGIN
 	
 	--insertar Customers
@@ -184,7 +185,7 @@ BEGIN
 		ORDER BY random()
 		LIMIT 1;
 		
-		--choose city_id
+		-- choose city_id
 		SELECT id INTO city_id
 		FROM city
 		Where city_name = (
@@ -194,6 +195,14 @@ BEGIN
 			LIMIT 1
 		);
 		
+		-- choose address
+		SELECT name INTO calle
+		FROM street_aux
+		ORDER BY random()
+		LIMIT 1;
+		
+		calle := round(random() * 100) + 100 || ' ' || calle;
+		
 		INSERT INTO Customer (
 			first_name, last_name, user_name, password, time_inserted, 
 		 	confirmation_code, time_confirmed, contact_email, contact_phone, 
@@ -201,7 +210,7 @@ BEGIN
 		)
 		VALUES (
 			nombreCliente, apellidoCliente, username, pw, time_inserted, 
-			code, time_confirmed, email, phone_number, city_id, 'hola', city_id, 'hola'
+			code, time_confirmed, email, phone_number, city_id, calle, city_id, calle
 		);
 	END LOOP;
 
