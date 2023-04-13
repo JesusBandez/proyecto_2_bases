@@ -115,6 +115,7 @@ DECLARE
 	time_confirmed timestamp;
 	code VARCHAR;
 	email VARCHAR;
+	phone_number VARCHAR;
 BEGIN
 	
 	--insertar Customers
@@ -155,6 +156,12 @@ BEGIN
 		-- choose email
 		email := nombreCliente || apellidoCliente ||i*10 || '@gmail.com';
 		
+		-- choose phone number
+		SELECT number INTO phone_number
+		FROM phone_number_aux
+		ORDER BY random()
+		LIMIT 1;
+		
 		INSERT INTO Customer (
 			first_name, last_name, user_name, password, time_inserted, 
 		 	confirmation_code, time_confirmed, contact_email, contact_phone, 
@@ -162,7 +169,7 @@ BEGIN
 		)
 		VALUES (
 			nombreCliente, apellidoCliente, username, pw, time_inserted, 
-			code, time_confirmed, email, 'hola', 37, 'hola', 37, 'hola'
+			code, time_confirmed, email, phone_number, 37, 'hola', 37, 'hola'
 		);
 	END LOOP;
 
@@ -179,7 +186,6 @@ BEGIN
 CALL createCustomers(number_of_customers);
 END
 $$ LANGUAGE plpgsql;
-
 
 
 	
