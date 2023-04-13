@@ -49,10 +49,10 @@ CREATE TABLE phone_number_aux (
 	number VARCHAR(50) NOT NULL
 );
 
-\copy city_aux FROM 'filtered_data_cities.csv' WITH DELIMITER ',' CSV HEADER;
-\copy last_name FROM 'filtered_data_names.csv' WITH DELIMITER ',' CSV HEADER;
-\copy first_name FROM 'names.csv' WITH DELIMITER ',' CSV HEADER;
-\copy street_aux FROM 'streets.csv' WITH DELIMITER ',' CSV HEADER;
+\copy city_aux FROM './CSVs/filtered_data_cities.csv' WITH DELIMITER ',' CSV HEADER;
+\copy last_name FROM './CSVs/filtered_data_names.csv' WITH DELIMITER ',' CSV HEADER;
+\copy first_name FROM './CSVs/names.csv' WITH DELIMITER ',' CSV HEADER;
+\copy street_aux FROM './CSVs/streets.csv' WITH DELIMITER ',' CSV HEADER;
 \copy item_aux FROM './CSVs/items.csv' WITH DELIMITER ',' CSV HEADER;
 \copy brand_aux FROM './CSVs/marcas.csv' WITH DELIMITER E'~' CSV HEADER;
 \copy phone_number_aux FROM 'CSVs/phone_numbers.csv' WITH DELIMITER ',' CSV HEADER;
