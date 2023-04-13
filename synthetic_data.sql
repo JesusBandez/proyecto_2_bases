@@ -12,6 +12,7 @@ DROP TABLE IF EXISTS street_aux;
 DROP TABLE IF EXISTS phone_number_aux;
 DROP TABLE IF EXISTS item_aux;
 DROP TABLE IF EXISTS brand_aux;
+DROP TABLE IF EXISTS customer_personality;
 -- ####################################################################
 -- ####################################################################
 
@@ -49,6 +50,11 @@ CREATE TABLE phone_number_aux (
 	number VARCHAR(50) NOT NULL
 );
 
+CREATE TABLE customer_personality (
+	id INT,
+	placed_orders_rate FLOAT
+);
+
 \copy city_aux FROM './CSVs/filtered_data_cities.csv' WITH DELIMITER ',' CSV HEADER;
 \copy last_name FROM './CSVs/filtered_data_names.csv' WITH DELIMITER ',' CSV HEADER;
 \copy first_name FROM './CSVs/names.csv' WITH DELIMITER ',' CSV HEADER;
@@ -62,6 +68,30 @@ INSERT INTO city (city_name, postal_code)
 	SELECT city, zips
 	FROM city_aux;
 
+-- insertar status de ordenes en el catalogo
+INSERT INTO status_catalog (status_name)
+	VALUES
+		('order placed'),
+		('in transit'),
+		('delivered');
+
+
+-- procedimiento crear ordenes
+/*
+CREATE OR REPLACE PROCEDURE createOrders(number_of_orders INT) 
+AS $$
+DECLARE
+
+BEGIN	
+	FOR i IN 1..number_of_orders LOOP
+
+	END LOOP;
+
+
+
+END
+$$ LANGUAGE plpgsql;
+*/
 
 -- procedimiento crear productos
 CREATE OR REPLACE PROCEDURE createItems(number_of_items INT) 
@@ -139,6 +169,8 @@ DECLARE
 	phone_number VARCHAR;
 	city_id INTEGER;
 	calle VARCHAR;
+	customer_id INT;
+	delta INT;
 BEGIN
 	
 	--insertar Customers
@@ -214,6 +246,15 @@ BEGIN
 		);
 	END LOOP;
 
+	FOR customer_id IN (SELECT id FROM Customer) LOOP
+		-- Delta define la diferencia del menor al mayor numero posible para asignar
+		-- a placed_orders_rate. No debe ser mayor a 50
+		delta := 30;
+
+		INSERT INTO customer_personality (id, placed_orders_rate)
+			VALUES
+			(customer_id, RANDOM()*2*delta+50-delta);
+	END LOOP;
 
 END
 $$ LANGUAGE plpgsql;
