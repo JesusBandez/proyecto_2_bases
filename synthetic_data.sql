@@ -9,6 +9,7 @@ DROP TABLE IF EXISTS city_aux;
 DROP TABLE IF EXISTS last_name;
 DROP TABLE IF EXISTS first_name;
 DROP TABLE IF EXISTS street_aux;
+DROP TABLE IF EXISTS phone_number_aux;
 DROP TABLE IF EXISTS item_aux;
 DROP TABLE IF EXISTS brand_aux;
 -- ####################################################################
@@ -44,12 +45,17 @@ CREATE TABLE brand_aux (
 	name VARCHAR(255) NOT NULL
 );
 
+CREATE TABLE phone_number_aux (
+	number VARCHAR(50) NOT NULL
+);
+
 \copy city_aux FROM 'filtered_data_cities.csv' WITH DELIMITER ',' CSV HEADER;
 \copy last_name FROM 'filtered_data_names.csv' WITH DELIMITER ',' CSV HEADER;
 \copy first_name FROM 'names.csv' WITH DELIMITER ',' CSV HEADER;
 \copy street_aux FROM 'streets.csv' WITH DELIMITER ',' CSV HEADER;
 \copy item_aux FROM './CSVs/items.csv' WITH DELIMITER ',' CSV HEADER;
 \copy brand_aux FROM './CSVs/marcas.csv' WITH DELIMITER E'~' CSV HEADER;
+\copy phone_number_aux FROM 'CSVs/phone_numbers.csv' WITH DELIMITER ',' CSV HEADER;
 
 -- llenar tabla city
 INSERT INTO city (city_name, postal_code)
