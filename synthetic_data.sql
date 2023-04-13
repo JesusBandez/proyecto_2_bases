@@ -64,17 +64,19 @@ INSERT INTO city (city_name, postal_code)
 
 
 -- procedimiento crear productos
-CREATE OR REPLACE PROCEDURE createProducts(number_of_products INT) 
+CREATE OR REPLACE PROCEDURE createItems(number_of_items INT) 
 AS $$
 DECLARE
 	name_product VARCHAR;
 	brand VARCHAR;
 	price DECIMAL(10, 2);
+	unit_id INT;
+	to_insert_unit_name VARCHAR;
 
 BEGIN	
-	FOR i IN 1..number_of_products LOOP
+	FOR i IN 1..number_of_items LOOP
 		-- Choose product name
-		SELECT name INTO name_product
+		SELECT name, unit INTO name_product, to_insert_unit_name
 		FROM item_aux
 		ORDER BY random()
 		LIMIT 1;
@@ -90,7 +92,26 @@ BEGIN
 
 		-- Assign a random price
 		price := random()*100;
-		RAISE NOTICE 'Value: %', price;
+		
+		-- Assign unit
+		SELECT id INTO unit_id
+		FROM unit
+		WHERE unit_name = to_insert_unit_name;
+		
+		IF unit_id IS NULL THEN
+			INSERT INTO unit ( unit_name )
+			VALUES ( to_insert_unit_name );
+			SELECT id INTO unit_id
+			FROM unit
+			WHERE unit_name = to_insert_unit_name;
+		END IF;
+
+		INSERT INTO item (
+			item_name, price, unit_id
+		) VALUES (
+			name_product, price, unit_id
+		);
+
 	END LOOP;
 
 
@@ -184,6 +205,7 @@ CREATE OR REPLACE PROCEDURE spCreateTestData(number_of_customers INT, number_of_
 AS $$
 BEGIN
 CALL createCustomers(number_of_customers);
+CALL createItems(number_of_items);
 END
 $$ LANGUAGE plpgsql;
 
