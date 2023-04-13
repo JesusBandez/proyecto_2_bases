@@ -1,6 +1,18 @@
 -- extension usada para generar passsword aleatorias 
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
+
+-- ####################################################################
+-- ########## PROBABLEMENTE TENDREMOS QUE ELIMINAR ESTO DESPUES #######
+\i create_tables.sql
+DROP TABLE IF EXISTS city_aux;
+DROP TABLE IF EXISTS last_name;
+DROP TABLE IF EXISTS first_name;
+DROP TABLE IF EXISTS street_aux;
+-- ####################################################################
+-- ####################################################################
+
+
 CREATE TABLE city_aux (
     city VARCHAR(128) NOT NULL,
 	pupulation INT,
@@ -30,9 +42,9 @@ INSERT INTO city (city_name, postal_code)
 	SELECT city, zips
 	FROM city_aux;
 
--- Procedimiento almacenado
-CREATE OR REPLACE FUNCTION spCreateTestData(number_of_customers INT, number_of_orders INT, number_of_items INT, avg_items_per_order INT) 
-RETURNS VOID AS $$
+
+CREATE OR REPLACE PROCEDURE createCustomers(number_of_customers INT) 
+AS $$
 DECLARE
 	nombreCliente VARCHAR;
 	apellidoCliente VARCHAR;
@@ -47,7 +59,6 @@ DECLARE
 	code VARCHAR;
 	email VARCHAR;
 BEGIN
-	
 	
 	--insertar Customers
 	FOR i IN 1..number_of_customers LOOP
@@ -97,5 +108,21 @@ BEGIN
 			code, time_confirmed, email, 'hola', 37, 'hola', 37, 'hola'
 		);
 	END LOOP;
+
+
 END
 $$ LANGUAGE plpgsql;
+
+
+
+-- Procedimiento almacenado
+CREATE OR REPLACE PROCEDURE spCreateTestData(number_of_customers INT, number_of_orders INT, number_of_items INT, avg_items_per_order INT) 
+AS $$
+BEGIN
+CALL createCustomers(number_of_customers);
+END
+$$ LANGUAGE plpgsql;
+
+
+
+	
