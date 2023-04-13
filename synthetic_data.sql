@@ -1,6 +1,6 @@
 -- extension usada para generar passsword aleatorias 
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
-
+-- RAISE NOTICE 'Value: %', deletedContactId;
 
 -- ####################################################################
 -- ########## PROBABLEMENTE TENDREMOS QUE ELIMINAR ESTO DESPUES #######
@@ -77,13 +77,20 @@ INSERT INTO status_catalog (status_name)
 
 
 -- procedimiento crear ordenes
-/*
+
 CREATE OR REPLACE PROCEDURE createOrders(number_of_orders INT) 
 AS $$
 DECLARE
-
+	customer_id INT;
 BEGIN	
 	FOR i IN 1..number_of_orders LOOP
+		--choose user
+		SELECT id INTO customer_id
+		FROM customer
+		NATURAL JOIN customer_personality
+		ORDER BY random() * placed_orders_rate
+		LIMIT 1;
+		RAISE NOTICE 'Value: %', customer_id;
 
 	END LOOP;
 
@@ -91,7 +98,7 @@ BEGIN
 
 END
 $$ LANGUAGE plpgsql;
-*/
+
 
 -- procedimiento crear productos
 CREATE OR REPLACE PROCEDURE createItems(number_of_items INT) 
@@ -248,12 +255,12 @@ BEGIN
 
 	FOR customer_id IN (SELECT id FROM Customer) LOOP
 		-- Delta define la diferencia del menor al mayor numero posible para asignar
-		-- a placed_orders_rate. No debe ser mayor a 50
-		delta := 30;
+		-- a placed_orders_rate. No debe ser mayor a 500
+		delta := 400;
 
 		INSERT INTO customer_personality (id, placed_orders_rate)
 			VALUES
-			(customer_id, RANDOM()*2*delta+50-delta);
+			(customer_id, RANDOM()*2*delta+500-delta);
 	END LOOP;
 
 END
@@ -267,6 +274,7 @@ AS $$
 BEGIN
 CALL createCustomers(number_of_customers);
 CALL createItems(number_of_items);
+CALL createOrders(number_of_orders);
 END
 $$ LANGUAGE plpgsql;
 
