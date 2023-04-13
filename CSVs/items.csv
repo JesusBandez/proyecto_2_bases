@@ -1,0 +1,510 @@
+"name","unit","metric"
+Manzanas,kg,95
+Leche,lt,87
+Huevos,docena,78
+Arroz,kg,69
+Frijoles,kg,58
+Carne de res,kg,52
+Pollo,kg,45
+Pescado,kg,36
+Queso,kg,25
+Pan,unidad,14
+Cebolla,kg,92
+Plátanos,kg,89
+Avena,kg,81
+Yogur,lt,76
+Pasta,kg,67
+Tomates,kg,54
+Carne de cerdo,kg,46
+Pavo,kg,39
+Salmon,kg,28
+Mantequilla,kg,17
+Zanahorias,kg,8
+Naranjas,kg,96
+Café,kg,88
+Polvo para hornear,kg,77
+Pimiento,kg,68
+Papa,kg,59
+Atún,kg,50
+Aguacate,kg,42
+Calabacín,kg,33
+Queso crema,kg,22
+Pan integral,unidad,11
+Champiñones,kg,97
+Fresa,kg,90
+Cereal,kg,82
+Jugo de naranja,lt,73
+Lentejas,kg,63
+Cebollino,kg,55
+Tocino,kg,49
+Tilapia,kg,40
+Aceite de oliva,lt,30
+Brócoli,kg,19
+Limones,kg,9
+Pepino,kg,98
+Melón,kg,91
+Harina de trigo,kg,83
+Yema de huevo,docena,75
+Miel,kg,66
+Jitomates,kg,57
+Carne molida,kg,48
+Jamón,kg,41
+Coliflor,kg,32
+Mango,kg,23
+Pan tostado,unidad,12
+Perejil,kg,99
+Piña,kg,94
+Granola,kg,85
+Jugo de manzana,lt,79
+Garbanzos,kg,71
+Ajo,kg,61
+Salchicha,kg,53
+Salmón enlatado,kg,44
+Aceitunas,kg,35
+Albahaca,kg,24
+Pan blanco,unidad,15
+Hortalizas,kg,100
+Ciruela,kg,93
+Galletas,kg,84
+Té,kg,72
+Frijol negro,kg,65
+Cilantro,kg,56
+Pepperoni,kg,47
+Anchoas,kg,38
+Vinagre balsámico,lt,27
+Almendras,kg,18
+Sandía,kg,7
+Espárragos,kg,95
+Uvas,kg,89
+Palomitas de maíz,kg,80
+Jugo de piña,lt,70
+Arvejas,kg,62
+Perejil rizado,kg,51
+Costillas de cerdo,kg,43
+Trucha,kg,36
+Aceitunas verdes,kg,26
+Queso cheddar,kg,15
+Pimiento morrón,kg,6
+Cilantro fresco,kg,96
+Lima,kg,98
+Canela,kg,92
+Chayote,kg,89
+Ensalada mixta,kg,81
+Pierna de pollo,kg,75
+Pepinillos,kg,66
+Salchicha italiana,kg,59
+Cereal de avena,kg,50
+Guisantes,kg,41
+Maní,kg,32
+Salsa de tomate,lt,24
+Crema agria,kg,15
+Yogur griego,kg,9
+Aceite de coco,lt,99
+Mango fresco,kg,93
+Jitomate cherry,kg,86
+Melón dulce,kg,78
+Paprika,kg,71
+Pollo frito,kg,63
+Zapallo,kg,56
+Maíz,kg,48
+Salsa de soja,lt,39
+Lechuga,kg,30
+Mermelada,kg,22
+Salsa picante,lt,13
+Cangrejo de río,kg,7
+Champiñones frescos,kg,100
+Cangrejo de mar,kg,94
+Frambuesas,kg,88
+Sandwich de jamón,unidad,81
+Guisantes negros,kg,75
+Leche de almendra,lt,68
+Tofu,kg,60
+Torta de chocolate,unidad,53
+Salsa ranch,kg,45
+Jugo de toronja,lt,38
+Ciruela seca,kg,29
+Salsa de queso,kg,20
+Cangrejo rey,kg,12
+Filete de res,kg,5
+Pechuga de pavo,kg,99
+Mango congelado,kg,92
+Frutas del bosque,kg,85
+Salami,kg,77
+Jugo de arándano,lt,70
+Cilantro fresco picado,kg,62
+Filete de tilapia,kg,55
+Espárragos frescos,kg,47
+Salsa de barbacoa,lt,38
+Salsa tzatziki,kg,29
+Salsa tártara,kg,20
+Salmón fresco,kg,11
+Salmón ahumado,kg,4
+Hamburguesa,unidad,100
+Cebolla en polvo,kg,94
+Carne desmenuzada,kg,87
+Chorizo,kg,79
+Acelga,kg,72
+Tarta de manzana,unidad,64
+Lentejas rojas,kg,57
+Crema de cacahuate,kg,49
+Albóndigas,kg,42
+Panqueques,unidad,33
+Jugo de sandía,lt,25
+Ensalada de atún,kg,16
+Pesto,kg,9
+Galletas de chocolate,kg,3
+Hamburguesa vegetariana,unidad,99
+Cebolla blanca,kg,93
+Carne de cordero,kg,86
+Sopa de pollo,lt,78
+Fideos soba,kg,71
+Salsa agridulce,lt,63
+Salsa para pasta,kg,56
+Miel de abeja,kg,98
+Calabaza,kg,92
+Espinacas,kg,89
+Ensalada César,kg,81
+Alitas de pollo,kg,75
+Aceitunas,kg,66
+Salchicha de pavo,kg,59
+Granola,kg,50
+Almejas,kg,41
+Avellanas,kg,32
+Salsa de queso azul,lt,24
+Sour cream,kg,15
+Yogur natural,kg,9
+Aceite de oliva,lt,99
+Mango maduro,kg,93
+Tomate pera,kg,86
+Papaya,kg,78
+Cebolla morada,kg,71
+Costillas BBQ,kg,63
+Papa,kg,56
+Arroz integral,kg,48
+Salsa BBQ,lt,39
+Rúcula,kg,30
+Mantequilla de maní,kg,22
+Salsa de chipotle,lt,13
+Pulpo,kg,7
+Hongos portobello,kg,100
+Langosta,kg,94
+Uvas,kg,88
+Bagel de salmón,unidad,81
+Frijoles pintos,kg,75
+Leche de coco,lt,68
+Tempeh,kg,60
+Pastel de zanahoria,unidad,53
+Salsa de mostaza,kg,45
+Jugo de naranja,lt,38
+Ciruela fresca,kg,29
+Salsa de espinacas,kg,20
+Jaiba,kg,12
+Filete de cerdo,kg,5
+Jamón serrano,kg,99
+Mango en almíbar,kg,92
+Fresas,kg,85
+Jamonilla,kg,77
+Jugo de uva,lt,70
+Hojas de albahaca,kg,62
+Filete de salmón,kg,55
+Berenjena,kg,47
+Salsa de curry,lt,38
+Salsa de cilantro,kg,29
+Salsa de almejas,kg,20
+Atún fresco,kg,11
+Atún en lata,kg,4
+Pizza,unidad,100
+Cebolla caramelizada,kg,94
+Carne de cerdo molida,kg,87
+Salchichón,kg,79
+Repollo,kg,72
+Tarta de limón,unidad,64
+Frijoles negros,kg,57
+Mantequilla de almendra,kg,49
+Empanadas,kg,42
+Waffles,unidad,33
+Jugo de piña,lt,25
+Ensalada de camarones,kg,16
+Salsa pesto rojo,kg,9
+Galletas de avena,kg,3
+Hamburguesa vegana,unidad,99
+Cebolla blanca,kg,93
+Carne de res,kg,86
+Sopa de lentejas,lt,78
+Fideos udon,kg,71
+Salsa de aguacate,lt,63
+Salsa alfredo,kg,56
+Sopa de cebolla,lt,48
+Salsa de berenjena,kg,39
+Chucrut,kg,30
+Tzatziki,kg,22
+Tofu,kg,98
+Fresas con crema,kg,92
+Lechuga romana,kg,89
+Sopa de tomate,lt,81
+Pollo asado,kg,75
+Pimiento rojo,kg,66
+Chorizo,kg,59
+Cereal de arroz inflado,kg,50
+Almendras,kg,41
+Nueces,kg,32
+Queso ricotta,kg,24
+Crema de cacahuate,kg,15
+Leche descremada,lt,9
+Aceite de coco,lt,99
+Plátano macho,kg,93
+Coliflor,kg,86
+Mango verde,kg,78
+Zanahoria baby,kg,71
+Costillas de res,kg,63
+Batata,kg,56
+Lentejas,kg,48
+Salsa ranch,lt,39
+Lechuga iceberg,kg,30
+Mantequilla de coco,kg,22
+Salsa de ajo,lt,13
+Pulpo cocido,kg,7
+Champiñones,kg,100
+Camarones,kg,94
+Arándanos,kg,88
+Huevos rancheros,unidad,81
+Frijoles charros,kg,75
+Leche evaporada,lt,68
+Carne de cordero,kg,60
+Pastel de chocolate,unidad,53
+Salsa de soya,kg,45
+Jugo de manzana,lt,38
+Mango fresco,kg,29
+Salsa de piña,kg,20
+Cangrejo,kg,12
+Chuletas de cerdo,kg,5
+Queso panela,kg,99
+Tamarindo,kg,92
+Arándanos rojos,kg,85
+Salmonete,kg,77
+Jugo de arándano,lt,70
+Tomate cherry,kg,62
+Trucha,kg,55
+Cebolla en polvo,kg,47
+Salsa de tamarindo,lt,38
+Salsa de tomate verde,kg,29
+Salsa de ostiones,kg,20
+Sardinas,kg,11
+Filete de pescado,kg,4
+Burritos,unidad,100
+Cebolla deshidratada,kg,94
+Carne molida de res,kg,87
+Salami,kg,79
+Brócoli,kg,72
+Tarta de manzana,unidad,64
+Frijoles blancos,kg,57
+Mantequilla de ajonjolí,kg,49
+Tacos,kg,42
+Hotcakes,unidad,33
+Jugo de limón,lt,25
+Ensalada de atún,kg,16
+Salsa chimichurri,kg,9
+Galletas de chocolate,kg,3
+Champiñones portobello,kg,99
+Cebolla verde,kg,93
+Carne de cerdo deshebrada,kg,86
+Sopa de pollo,lt,78
+Fideos de arroz,kg,71
+Salsa de cacahuate,lt,63
+Salsa al vino tinto,kg,56
+Sopa de verduras,lt,48
+Salsa de pimiento,kg,39
+Repollo morado,kg,30
+Miel de abeja,kg,98
+Cangrejo de río,kg,92
+Maíz dulce,kg,89
+Salmón ahumado,kg,81
+Papas a la francesa,kg,75
+Salsa de chile de árbol,kg,66
+Té de hierbas,kg,59
+Muesli,kg,50
+Semillas de girasol,kg,41
+Chía,kg,32
+Tofu ahumado,kg,24
+Aceite de aguacate,lt,15
+Té chai,lt,9
+Tofu blando,kg,99
+Queso de cabra,kg,93
+Nopal,kg,86
+Ensalada de frutas,kg,78
+Rábano,kg,71
+Café molido,kg,63
+Carne de venado,kg,56
+Salsa BBQ,lt,48
+Salsa de chipotle,kg,39
+Salsa de cilantro,lt,30
+Leche de almendras,lt,22
+Salsa de tomate natural,lt,13
+Calamar,kg,7
+Ensalada de pollo,kg,100
+Chile poblano,kg,94
+Albahaca,kg,88
+Frijoles refritos,kg,81
+Pollo rostizado,kg,75
+Sopa de lentejas,lt,68
+Carne de búfalo,kg,60
+Pescado empanizado,kg,53
+Miel de agave,kg,45
+Té verde,kg,38
+Cilantro,kg,29
+Ajo deshidratado,kg,20
+Salsa de soya baja en sodio,lt,12
+Tostadas,unidad,5
+Té negro,kg,99
+Pollo agridulce,kg,92
+Pimiento verde,kg,85
+Café instantáneo,kg,77
+Salsa de arándanos,lt,70
+Nuez moscada,kg,62
+Salsa de mostaza,kg,55
+Galletas de avena,kg,47
+Salsa de queso,lt,38
+Sopa de verduras con fideos,lt,29
+Salsa de guacamole,kg,20
+Salsa de miel y mostaza,kg,11
+Aceitunas,kg,4
+Hamburguesa de pollo,unidad,100
+Frijoles negros,kg,94
+Papa cambray,kg,87
+Salsa inglesa,lt,79
+Mantequilla de maní,kg,72
+Salsa de naranja,kg,64
+Salsa de perejil,lt,57
+Ensalada de espinacas,kg,49
+Salsa de cacahuate picante,lt,42
+Salsa de tamarindo picante,kg,33
+Salsa de tomate cherry,lt,25
+Jugo de toronja,lt,16
+Aceite de oliva,lt,9
+Carne de cangrejo,kg,3
+Lechuga sangría,kg,99
+Tomillo,kg,93
+Chile de árbol,kg,86
+Levadura nutricional,kg,78
+Té de jazmín,kg,71
+Sopa de champiñones,lt,58
+Almendras,kg,46
+Salsa de mango,kg,33
+Acelgas,kg,21
+Fresas,kg,12
+Pollo a la parrilla,kg,99
+Mantequilla,kg,92
+Frijoles bayos,kg,85
+Galletas de chocolate,kg,77
+Salsa de pimiento,kg,64
+Albahaca morada,kg,56
+Yogurt de fresa,lt,49
+Nueces de Brasil,kg,41
+Sopa de pollo con fideos,lt,32
+Huevo,unidad,24
+Avena,kg,17
+Aceite de coco,lt,9
+Cangrejo de mar,kg,100
+Salsa de anchoas,kg,93
+Salsa de ajo,kg,86
+Albahaca tailandesa,kg,78
+Manzanas,kg,71
+Pimientos jalapeños,kg,63
+Salsa de mostaza y miel,kg,55
+Salsa de naranja y jengibre,kg,47
+Sopa de tomate,lt,39
+Masa de pizza,kg,31
+Galletas de vainilla,kg,22
+Tortilla de maíz,unidad,15
+Lechuga iceberg,kg,7
+Carne de cordero,kg,99
+Queso de bola,kg,92
+Calabacín,kg,85
+Salsa de tamarindo,kg,78
+Chile serrano,kg,71
+Chile guajillo,kg,63
+Salsa de ajonjolí,kg,56
+Queso de cabra con especias,kg,48
+Salsa de chile,kg,41
+Salsa de chipotle y miel,kg,32
+Salsa de cebolla,kg,25
+Salsa de vino tinto,lt,18
+Sopa de fideos,lt,10
+Lechuga romana,kg,3
+Mango,kg,100
+Miel de maple,lt,93
+Carne de res,kg,86
+Espinacas,kg,79
+Salsa de queso cheddar,kg,72
+Cebollas,kg,65
+Pescado al horno,kg,58
+Salsa de limón,kg,51
+Ensalada de pollo y manzana,kg,44
+Queso manchego,kg,37
+Salsa de nueces,kg,29
+Salsa de chile dulce,kg,22
+Salsa de aguacate,kg,15
+Sopa de fideos con pollo,lt,8
+Té rooibos,kg,100
+Salsa de tamarindo y chipotle,kg,93
+Carne de cerdo,kg,86
+Escarola,kg,79
+Papas a la huancaína,kg,72
+Salsa de yogurt y pepino,kg,65
+Salsa de queso crema y chipotle,kg,58
+Salsa de cilantro y limón,kg,51
+Salsa de jamaica,kg,44
+Sopa de arroz con pollo,lt,37
+Salmón ahumado,kg,80
+Salsa de nueces y queso azul,kg,75
+Tostadas de maíz,kg,68
+Camarones,kg,61
+Ensalada de lentejas,kg,56
+Salsa de albahaca y piñones,kg,49
+Chiles en escabeche,kg,42
+Té chai,kg,35
+Tarta de queso,unidad,29
+Carne de pollo,kg,23
+Salsa de espinacas y queso,kg,18
+Mermelada de fresa,kg,13
+Zanahorias,kg,7
+Queso ricotta,kg,99
+Leche de almendra,lt,92
+Salsa de habanero,kg,86
+Salsa de mostaza,kg,80
+Mousse de chocolate,kg,74
+Salsa de champiñones y crema,kg,68
+Sopa de pescado,lt,62
+Salsa de cerveza,kg,55
+Salsa de ajo y perejil,kg,49
+Galletas de avena y pasas,kg,43
+Miel de abeja,kg,37
+Salsa de chile ancho,kg,31
+Té verde,kg,25
+Chiles jalapeños en vinagre,kg,19
+Cebolla morada,kg,12
+Pepinillos,kg,6
+Salsa de queso azul,kg,100
+Mermelada de frutos rojos,kg,92
+Salsa de hongos,kg,84
+Salsa de tomate y chipotle,kg,77
+Arroz integral,kg,71
+Salsa de piña y chipotle,kg,65
+Salsa de chile de árbol,kg,59
+Mousse de fresa,kg,53
+Salsa de queso parmesano,kg,47
+Sopa de lentejas,lt,40
+Salsa de cilantro y aguacate,kg,34
+Champiñones portobello,kg,28
+Salsa de chipotle y tomate,kg,22
+Té negro,kg,16
+Pimiento morrón,kg,10
+Queso de bola ahumado,kg,3
+Pollo empanizado,kg,100
+Salsa de hierbas finas,kg,92
+Salsa de chile morita,kg,84
+Mantequilla de cacahuate,kg,76
+Salsa de queso de cabra,kg,69
+Salsa de tomate y albahaca,kg,63
+Salsa de miel y mostaza,kg,57
+Sopa de garbanzos,lt,50

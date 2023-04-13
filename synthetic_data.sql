@@ -9,6 +9,8 @@ DROP TABLE IF EXISTS city_aux;
 DROP TABLE IF EXISTS last_name;
 DROP TABLE IF EXISTS first_name;
 DROP TABLE IF EXISTS street_aux;
+DROP TABLE IF EXISTS item_aux;
+DROP TABLE IF EXISTS brand_aux;
 -- ####################################################################
 -- ####################################################################
 
@@ -32,10 +34,22 @@ CREATE TABLE street_aux (
 	name VARCHAR(50) NOT NULL
 );
 
+CREATE TABLE item_aux (
+	name VARCHAR(255) NOT NULL,
+	unit VARCHAR(255) NOT NULL,
+	metric VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE brand_aux (
+	name VARCHAR(255) NOT NULL
+);
+
 \copy city_aux FROM 'filtered_data_cities.csv' WITH DELIMITER ',' CSV HEADER;
 \copy last_name FROM 'filtered_data_names.csv' WITH DELIMITER ',' CSV HEADER;
 \copy first_name FROM 'names.csv' WITH DELIMITER ',' CSV HEADER;
 \copy street_aux FROM 'streets.csv' WITH DELIMITER ',' CSV HEADER;
+\copy item_aux FROM './CSVs/items.csv' WITH DELIMITER ',' CSV HEADER;
+\copy brand_aux FROM './CSVs/marcas.csv' WITH DELIMITER E'~' CSV HEADER;
 
 -- llenar tabla city
 INSERT INTO city (city_name, postal_code)
@@ -43,6 +57,43 @@ INSERT INTO city (city_name, postal_code)
 	FROM city_aux;
 
 
+-- procedimiento crear productos
+CREATE OR REPLACE PROCEDURE createProducts(number_of_products INT) 
+AS $$
+DECLARE
+	name_product VARCHAR;
+	brand VARCHAR;
+	price DECIMAL(10, 2);
+
+BEGIN	
+	FOR i IN 1..number_of_products LOOP
+		-- Choose product name
+		SELECT name INTO name_product
+		FROM item_aux
+		ORDER BY random()
+		LIMIT 1;
+
+		-- Choose brand name
+		SELECT name INTO brand
+		FROM brand_aux
+		ORDER BY random()
+		LIMIT 1;
+
+		-- Create product name
+		name_product := CONCAT(name_product, ' ',brand);		
+
+		-- Assign a random price
+		price := random()*100;
+		RAISE NOTICE 'Value: %', price;
+	END LOOP;
+
+
+
+END
+$$ LANGUAGE plpgsql;
+
+
+-- procedimiento crear customers
 CREATE OR REPLACE PROCEDURE createCustomers(number_of_customers INT) 
 AS $$
 DECLARE
