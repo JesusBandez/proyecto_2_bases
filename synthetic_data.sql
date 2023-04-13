@@ -8,7 +8,7 @@ CREATE TABLE city_aux (
 );
 
 CREATE TABLE last_name (
-    name VARCHAR(50) NOT NULL
+    name VARCHAR(50) NOT NULL,
     count INTEGER   
 );
 
