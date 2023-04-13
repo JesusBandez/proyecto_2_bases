@@ -58,7 +58,7 @@ INSERT INTO city (city_name, postal_code)
 
 
 -- procedimiento crear productos
-CREATE OR REPLACE PROCEDURE createProducts(number_of_products INT) 
+CREATE OR REPLACE PROCEDURE createItems(number_of_items INT) 
 AS $$
 DECLARE
 	name_product VARCHAR;
@@ -68,7 +68,7 @@ DECLARE
 	to_insert_unit_name VARCHAR;
 
 BEGIN	
-	FOR i IN 1..number_of_products LOOP
+	FOR i IN 1..number_of_items LOOP
 		-- Choose product name
 		SELECT name, unit INTO name_product, to_insert_unit_name
 		FROM item_aux
@@ -192,6 +192,7 @@ CREATE OR REPLACE PROCEDURE spCreateTestData(number_of_customers INT, number_of_
 AS $$
 BEGIN
 CALL createCustomers(number_of_customers);
+CALL createItems(number_of_items);
 END
 $$ LANGUAGE plpgsql;
 
