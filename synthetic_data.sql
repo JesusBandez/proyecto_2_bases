@@ -407,6 +407,42 @@ BEGIN
 END
 $$ LANGUAGE plpgsql;
 
+-- Procedimiento para asignar los items a las ordenes
+CREATE OR REPLACE PROCEDURE createOrderItems(promedio INT, numeroDeOrdenes INT) 
+AS $$
+DECLARE
+placed_id INT;
+x INT;
+acc INT := 0;
+count INT := 1;
+y INT;
+BEGIN
+	x := numeroDeOrdenes % 2;
+	FOR placed_id IN (SELECT id FROM placed_order) LOOP
+		CASE
+			WHEN x = 0 THEN
+				y := floor(random() * promedio) + 1;
+				FOR i IN 1..y LOOP
+					INSERT INTO order_item (placed_order_id, item_id, quantity, price) 
+					VALUES (placed_id, 1, 2.0, 2.0);
+				END LOOP;
+				acc = acc + y;
+				count = count + 1;
+				x := 1;
+			ELSE
+				y := count*promedio - acc;
+				FOR i IN 1..y LOOP
+					INSERT INTO order_item (placed_order_id, item_id, quantity, price) 
+					VALUES (placed_id, 1, 2.0, 2.0);
+				END LOOP;
+				acc = acc + y;
+				count = count + 1;
+				x := 0;
+		END CASE;
+	END LOOP;
+END
+$$ LANGUAGE plpgsql;
+
 
 
 -- Procedimiento almacenado
@@ -417,6 +453,7 @@ CALL createCustomers(number_of_customers);
 CALL createItems(number_of_items);
 CALL createOrders(number_of_orders);
 CALL createEmployees(10);
+CALL createOrderItems(avg_items_per_order, number_of_orders);
 END
 $$ LANGUAGE plpgsql;
 
