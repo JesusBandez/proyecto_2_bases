@@ -18,6 +18,7 @@ DROP TABLE IF EXISTS employee;
 DROP TABLE IF EXISTS placed_order;
 DROP TABLE IF EXISTS customer;
 DROP TABLE IF EXISTS city;
+DROP TABLE IF EXISTS order_item;
 
 
 -- yellow area
@@ -83,6 +84,14 @@ CREATE TABLE placed_order (
     delivery_address VARCHAR(255) NOT NULL,
     grade_customer INT,
     grade_employee INT
+);
+
+CREATE TABLE order_item (
+    id SERIAL PRIMARY KEY,
+    placed_order_id INT REFERENCES placed_order (id) NOT NULL,
+    item_id INT REFERENCES item (id) NOT NULL,
+    quantity DECIMAL(10, 3) NOT NULL,
+    price DECIMAL(10, 2) NOT NULL
 );
 
 CREATE TABLE order_status (
