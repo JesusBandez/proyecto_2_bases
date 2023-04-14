@@ -77,25 +77,41 @@ INSERT INTO status_catalog (status_name)
 
 
 -- procedimiento crear ordenes
-
 CREATE OR REPLACE PROCEDURE createOrders(number_of_orders INT) 
 AS $$
 DECLARE
 	customer_id INT;
+	customer_inserted_time TIMESTAMP;
+	city_destination_id INT;
+	address VARCHAR;
+	order_time_placed TIMESTAMP;
+	
 BEGIN	
 	FOR i IN 1..number_of_orders LOOP
 		--choose user
-		SELECT id INTO customer_id
+		SELECT id, time_inserted 
+		INTO customer_id, customer_inserted_time
 		FROM customer
 		NATURAL JOIN customer_personality
 		ORDER BY random() * placed_orders_rate
 		LIMIT 1;
-		RAISE NOTICE 'Value: %', customer_id;
+		
+		-- city id and address for destination
+		SELECT delivery_city_id, delivery_address INTO city_destination_id, address
+		FROM customer
+		WHERE id = customer_id;
+
+		-- Select a random date between inserted time and today
+		SELECT customer_inserted_time +
+			RANDOM() * (CURRENT_DATE - customer_inserted_time)
+			INTO order_time_placed;
+		
+		INSERT INTO placed_order 
+			(customer_id, time_placed, delivery_city_id, delivery_address)
+			VALUES
+			(customer_id, customer_inserted_time, city_destination_id, address);
 
 	END LOOP;
-
-
-
 END
 $$ LANGUAGE plpgsql;
 
