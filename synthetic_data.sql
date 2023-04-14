@@ -75,6 +75,57 @@ INSERT INTO status_catalog (status_name)
 		('in transit'),
 		('delivered');
 
+CREATE OR REPLACE PROCEDURE createOrderStatus(order_id INT, order_inserted_time TIMESTAMP, order_status VARCHAR) 
+AS $$
+DECLARE
+	status_order_placed_id INT;
+	status_in_transit_id INT;
+	status_delivered_id INT;
+BEGIN
+	SELECT id INTO status_order_placed_id
+	FROM status_catalog
+	WHERE status_name = 'order placed';
+
+	SELECT id INTO status_in_transit_id
+	FROM status_catalog
+	WHERE status_name = 'in transit';
+
+	SELECT id INTO status_delivered_id
+	FROM status_catalog
+	WHERE status_name = 'delivered';
+
+	IF order_status = 'order placed' THEN
+		INSERT INTO order_status 
+			(placed_order_id, status_catalog_id, status_time)
+		VALUES
+			(order_id, status_order_placed_id, order_inserted_time);
+
+	ELSIF order_status = 'in transit' THEN	
+		INSERT INTO order_status 
+			(placed_order_id, status_catalog_id, status_time)
+		VALUES
+			(order_id, status_order_placed_id, order_inserted_time);
+		INSERT INTO order_status 
+			(placed_order_id, status_catalog_id, status_time)
+		VALUES
+			(order_id, status_in_transit_id, order_inserted_time);
+
+	ELSE 
+		INSERT INTO order_status 
+			(placed_order_id, status_catalog_id, status_time)
+		VALUES
+			(order_id, status_order_placed_id, order_inserted_time);
+		INSERT INTO order_status 
+			(placed_order_id, status_catalog_id, status_time)
+		VALUES
+			(order_id, status_in_transit_id, order_inserted_time);
+		INSERT INTO order_status 
+			(placed_order_id, status_catalog_id, status_time)
+		VALUES
+			(order_id, status_delivered_id, order_inserted_time);
+	END IF;
+END
+$$ LANGUAGE plpgsql;
 
 -- procedimiento crear ordenes
 CREATE OR REPLACE PROCEDURE createOrders(number_of_orders INT) 
@@ -85,10 +136,11 @@ DECLARE
 	city_destination_id INT;
 	address VARCHAR;
 	order_time_placed TIMESTAMP;
+	order_id INT;
 	
 BEGIN	
 	FOR i IN 1..number_of_orders LOOP
-		--choose user
+		-- Elegir usuario
 		SELECT id, time_inserted 
 		INTO customer_id, customer_inserted_time
 		FROM customer
@@ -96,12 +148,12 @@ BEGIN
 		ORDER BY random() * placed_orders_rate
 		LIMIT 1;
 		
-		-- city id and address for destination
+		-- ID de ciudad y direccion
 		SELECT delivery_city_id, delivery_address INTO city_destination_id, address
 		FROM customer
 		WHERE id = customer_id;
 
-		-- Select a random date between inserted time and today
+		-- Elegir una fecha aleatoria entre la insercion del usuario y hoy
 		SELECT customer_inserted_time +
 			RANDOM() * (CURRENT_DATE - customer_inserted_time)
 			INTO order_time_placed;
@@ -109,7 +161,11 @@ BEGIN
 		INSERT INTO placed_order 
 			(customer_id, time_placed, delivery_city_id, delivery_address)
 			VALUES
-			(customer_id, customer_inserted_time, city_destination_id, address);
+			(customer_id, order_time_placed, city_destination_id, address)
+			RETURNING id INTO order_id;
+		
+		-- Agregar el historial de status a la orden
+		CALL createOrderStatus(order_id, order_time_placed, 'delivered');
 
 	END LOOP;
 END
@@ -153,10 +209,8 @@ BEGIN
 		
 		IF unit_id IS NULL THEN
 			INSERT INTO unit ( unit_name )
-			VALUES ( to_insert_unit_name );
-			SELECT id INTO unit_id
-			FROM unit
-			WHERE unit_name = to_insert_unit_name;
+			VALUES ( to_insert_unit_name )
+			RETURNING id INTO unit_id;
 		END IF;
 
 		INSERT INTO item (
