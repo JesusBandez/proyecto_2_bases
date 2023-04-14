@@ -13,6 +13,7 @@ DROP TABLE IF EXISTS phone_number_aux;
 DROP TABLE IF EXISTS item_aux;
 DROP TABLE IF EXISTS brand_aux;
 DROP TABLE IF EXISTS customer_personality;
+
 -- ####################################################################
 -- ####################################################################
 
@@ -75,9 +76,32 @@ INSERT INTO status_catalog (status_name)
 		('in transit'),
 		('delivered');
 
-/*
-Prodecimiento para llenar el historial de status de una orden.
-*/
+-- Procedimiento para crear los deliverys de una orden
+CREATE OR REPLACE PROCEDURE createDelivery(order_id INT, transit_time TIMESTAMP, delivered_time TIMESTAMP DEFAULT NULL)
+AS $$
+DECLARE
+	id_order_status INT;
+	planned_time TIMESTAMP;
+	id_employee INT;
+BEGIN
+
+	-- Calcular tiempo planeado de entrega
+	planned_time := transit_time + RANDOM()* INTERVAL '1 DAYS' + INTERVAL '12 hours';	
+
+	-- Elegir employee al azar
+	SELECT id INTO id_employee
+	FROM employee	
+	ORDER BY random()
+	LIMIT 1;
+
+	-- Insertar el delivery
+	INSERT INTO delivery (delivery_time_planned, delivery_time_actual, placed_order_id, employee_id)
+	VALUES
+		(planned_time, delivered_time, order_id, id_employee);
+END
+$$ LANGUAGE plpgsql;
+
+--Prodecimiento para llenar el historial de status de una orden.
 CREATE OR REPLACE PROCEDURE createOrderStatus(order_id INT, order_inserted_time TIMESTAMP) 
 AS $$
 DECLARE
@@ -109,13 +133,16 @@ BEGIN
 	IF NOW() - INTERVAL '5 hours' < order_inserted_time THEN
 		NULL;
 	-- Si la orden tiene menos de 5 dias creada, tiene 0.8 de probabilidad
-	-- de estar en 'in transit'
+	-- de aun estar en 'in transit'
 	ELSIF NOW() - INTERVAL '5 days' < order_inserted_time 
 		AND RANDOM() < 0.8 THEN
+		order_in_transit_time := order_inserted_time + RANDOM()*INTERVAL '2 days';
 		INSERT INTO order_status 
 			(placed_order_id, status_catalog_id, status_time)
 		VALUES
-			(order_id, status_in_transit_id, order_inserted_time + RANDOM()*INTERVAL '2 days');
+			(order_id, status_in_transit_id, order_in_transit_time);
+
+		CALL createDelivery(order_id, order_in_transit_time);
 
 	-- Toda orden con mayor tiempo de creacion se guarda como entregada
 	ELSE 
@@ -130,9 +157,14 @@ BEGIN
 			(placed_order_id, status_catalog_id, status_time)
 		VALUES
 			(order_id, status_delivered_id, order_delivered_time);
+
+		CALL createDelivery(order_id, order_in_transit_time, order_delivered_time);
 	END IF;
 END
 $$ LANGUAGE plpgsql;
+
+
+
 
 -- procedimiento crear ordenes
 CREATE OR REPLACE PROCEDURE createOrders(number_of_orders INT) 
@@ -343,7 +375,7 @@ BEGIN
 END
 $$ LANGUAGE plpgsql;
 
-
+-- Procedimiento para crear empleados
 CREATE OR REPLACE PROCEDURE createEmployees(number_of_employees INT)
 AS $$
 DECLARE
@@ -374,6 +406,8 @@ BEGIN
 	END LOOP;
 END
 $$ LANGUAGE plpgsql;
+
+
 
 -- Procedimiento almacenado
 CREATE OR REPLACE PROCEDURE spCreateTestData(number_of_customers INT, number_of_orders INT, number_of_items INT, avg_items_per_order INT) 

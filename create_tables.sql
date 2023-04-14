@@ -8,6 +8,7 @@ Crear el esquema de la base
 
 DROP TABLE IF EXISTS item_in_box;
 DROP TABLE IF EXISTS box;
+DROP TABLE IF EXISTS order_item;
 DROP TABLE IF EXISTS item;
 DROP TABLE IF EXISTS unit;
 DROP TABLE IF EXISTS order_status;
@@ -18,7 +19,6 @@ DROP TABLE IF EXISTS employee;
 DROP TABLE IF EXISTS placed_order;
 DROP TABLE IF EXISTS customer;
 DROP TABLE IF EXISTS city;
-DROP TABLE IF EXISTS order_item;
 
 
 -- yellow area
