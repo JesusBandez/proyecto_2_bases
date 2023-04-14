@@ -344,6 +344,36 @@ END
 $$ LANGUAGE plpgsql;
 
 
+CREATE OR REPLACE PROCEDURE createEmployees(number_of_employees INT)
+AS $$
+DECLARE
+	name_employee VARCHAR;
+	last_name_employee VARCHAR;
+	emp_code VARCHAR;
+
+BEGIN
+	FOR i IN 1..number_of_employees LOOP
+		-- choose first_name
+		SELECT name INTO name_employee
+		FROM first_name
+		ORDER BY random()
+		LIMIT 1;
+		
+		-- choose last_name
+		SELECT name INTO last_name_employee
+		FROM last_name
+		ORDER BY random()
+		LIMIT 1;
+
+		emp_code := CONCAT('EMP_C', i);
+		
+		INSERT INTO employee (employee_code, first_name, last_name)
+		VALUES
+			(name_employee, last_name_employee, emp_code);
+
+	END LOOP;
+END
+$$ LANGUAGE plpgsql;
 
 -- Procedimiento almacenado
 CREATE OR REPLACE PROCEDURE spCreateTestData(number_of_customers INT, number_of_orders INT, number_of_items INT, avg_items_per_order INT) 
@@ -352,6 +382,7 @@ BEGIN
 CALL createCustomers(number_of_customers);
 CALL createItems(number_of_items);
 CALL createOrders(number_of_orders);
+CALL createEmployees(10);
 END
 $$ LANGUAGE plpgsql;
 
