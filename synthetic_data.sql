@@ -75,12 +75,17 @@ INSERT INTO status_catalog (status_name)
 		('in transit'),
 		('delivered');
 
-CREATE OR REPLACE PROCEDURE createOrderStatus(order_id INT, order_inserted_time TIMESTAMP, order_status VARCHAR) 
+/*
+Prodecimiento para llenar el historial de status de una orden.
+*/
+CREATE OR REPLACE PROCEDURE createOrderStatus(order_id INT, order_inserted_time TIMESTAMP) 
 AS $$
 DECLARE
 	status_order_placed_id INT;
 	status_in_transit_id INT;
 	status_delivered_id INT;
+	order_in_transit_time TIMESTAMP;
+	order_delivered_time TIMESTAMP;
 BEGIN
 	SELECT id INTO status_order_placed_id
 	FROM status_catalog
@@ -94,35 +99,37 @@ BEGIN
 	FROM status_catalog
 	WHERE status_name = 'delivered';
 
-	IF order_status = 'order placed' THEN
-		INSERT INTO order_status 
-			(placed_order_id, status_catalog_id, status_time)
-		VALUES
-			(order_id, status_order_placed_id, order_inserted_time);
+	-- Status placed
+	INSERT INTO order_status 
+		(placed_order_id, status_catalog_id, status_time)
+	VALUES
+		(order_id, status_order_placed_id, order_inserted_time);
 
-	ELSIF order_status = 'in transit' THEN	
+	-- Si la orden tiene menos de 5 horas creadas, es solo placed
+	IF NOW() - INTERVAL '5 hours' < order_inserted_time THEN
+		NULL;
+	-- Si la orden tiene menos de 5 dias creada, tiene 0.8 de probabilidad
+	-- de estar en 'in transit'
+	ELSIF NOW() - INTERVAL '5 days' < order_inserted_time 
+		AND RANDOM() < 0.8 THEN
 		INSERT INTO order_status 
 			(placed_order_id, status_catalog_id, status_time)
 		VALUES
-			(order_id, status_order_placed_id, order_inserted_time);
-		INSERT INTO order_status 
-			(placed_order_id, status_catalog_id, status_time)
-		VALUES
-			(order_id, status_in_transit_id, order_inserted_time);
+			(order_id, status_in_transit_id, order_inserted_time + RANDOM()*INTERVAL '2 days');
 
+	-- Toda orden con mayor tiempo de creacion se guarda como entregada
 	ELSE 
+		order_in_transit_time := order_inserted_time + RANDOM()*INTERVAL '2 days';
 		INSERT INTO order_status 
 			(placed_order_id, status_catalog_id, status_time)
 		VALUES
-			(order_id, status_order_placed_id, order_inserted_time);
+			(order_id, status_in_transit_id, order_in_transit_time);
+		
+		order_delivered_time := order_in_transit_time + RANDOM()*INTERVAL '3 days';
 		INSERT INTO order_status 
 			(placed_order_id, status_catalog_id, status_time)
 		VALUES
-			(order_id, status_in_transit_id, order_inserted_time);
-		INSERT INTO order_status 
-			(placed_order_id, status_catalog_id, status_time)
-		VALUES
-			(order_id, status_delivered_id, order_inserted_time);
+			(order_id, status_delivered_id, order_delivered_time);
 	END IF;
 END
 $$ LANGUAGE plpgsql;
@@ -155,7 +162,7 @@ BEGIN
 
 		-- Elegir una fecha aleatoria entre la insercion del usuario y hoy
 		SELECT customer_inserted_time +
-			RANDOM() * (CURRENT_DATE - customer_inserted_time)
+			RANDOM() * (NOW() - customer_inserted_time)
 			INTO order_time_placed;
 		
 		INSERT INTO placed_order 
@@ -165,7 +172,7 @@ BEGIN
 			RETURNING id INTO order_id;
 		
 		-- Agregar el historial de status a la orden
-		CALL createOrderStatus(order_id, order_time_placed, 'delivered');
+		CALL createOrderStatus(order_id, order_time_placed);
 
 	END LOOP;
 END
