@@ -3,6 +3,9 @@ with top5_orders as (
 	SELECT *
 	FROM placed_order p
 	JOIN order_item o ON p.id = o.placed_order_id
+	JOIN order_status os ON os.placed_order_id = p.id
+	JOIN status_catalog s ON os.status_catalog_id = s.id
+	WHERE s.status_name ='order confirmed'
 	ORDER BY price desc
 	Limit (SELECT COUNT(*)*0.05
 		   FROM placed_order p
@@ -24,6 +27,22 @@ JOIN city c ON c.id = po.delivery_city_id
 GROUP BY c.id
 ORDER BY dispatch_time DESC
 LIMIT 5
+
+-- query c
+with customer_total_10 as (
+	SELECT customer_id, sum(price) total
+	FROM placed_order p
+	JOIN order_item o ON p.id = o.placed_order_id
+	JOIN order_status os ON os.placed_order_id = p.id
+	JOIN status_catalog s ON os.status_catalog_id = s.id
+	WHERE s.status_name ='order confirmed'
+	GROUP BY customer_id
+	ORDER BY total desc
+	LIMIT 10
+	)
+SELECT c.* 
+FROM Customer c
+JOIN customer_total_10 t ON c.id = t.customer_id
 
 -- Query d
 WITH items_dispatch_time as (
