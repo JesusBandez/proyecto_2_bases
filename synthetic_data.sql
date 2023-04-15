@@ -313,7 +313,12 @@ DECLARE
 	city_id INTEGER;
 	calle VARCHAR;
 	customer_id INT;
-	delta INT;
+
+	-- Delta define la diferencia del menor al mayor numero posible para asignar
+	-- a placed_orders_rate. No debe ser mayor a max_delta
+	delta INT := 400;
+	max_delta INT := 500;
+
 BEGIN
 	
 	--insertar Customers
@@ -390,13 +395,9 @@ BEGIN
 	END LOOP;
 
 	FOR customer_id IN (SELECT id FROM Customer) LOOP
-		-- Delta define la diferencia del menor al mayor numero posible para asignar
-		-- a placed_orders_rate. No debe ser mayor a 500
-		delta := 400;
-
 		INSERT INTO customer_personality (id, placed_orders_rate)
 			VALUES
-			(customer_id, RANDOM()*2*delta+500-delta);
+			(customer_id, RANDOM()*2*delta+max_delta-delta);
 	END LOOP;
 
 END
@@ -434,6 +435,33 @@ BEGIN
 END
 $$ LANGUAGE plpgsql;
 
+
+-- Procedimiento asignar n items a una orden
+CREATE OR REPLACE PROCEDURE assignItemsToOrder(total_number_items_to_add INT, order_id INT) 
+AS $$
+DECLARE
+	item RECORD;
+	items_added INT := 0;
+	items_to_add INT;
+BEGIN
+	-- Numero de items a agregar
+	WHILE items_added < total_number_items_to_add LOOP
+		items_to_add := RANDOM()*((total_number_items_to_add-items_added)-1)+1;
+		
+		-- Se selecciona un item aleatorio para guardarlo 'items_to_add' veces
+		-- el precio del item influye en su probabilidad de ser elegido
+		SELECT * INTO item
+		FROM item
+		ORDER BY random()+(price/100)*0.3
+		LIMIT 1;
+
+		INSERT INTO order_item (placed_order_id, item_id, quantity, price) 
+		VALUES (order_id, item.id, items_to_add, items_to_add*item.price);
+
+		items_added := items_added + items_to_add;
+	END LOOP;
+END
+$$ LANGUAGE plpgsql;
 -- Procedimiento para asignar los items a las ordenes
 CREATE OR REPLACE PROCEDURE createOrderItems(promedio INT, numeroDeOrdenes INT) 
 AS $$
@@ -443,7 +471,7 @@ DECLARE
 	acc INT := 0;
 	count INT := 1;
 	y INT;
-	to_insert_item_id INT;
+
 	item_price decimal(10, 2);
 BEGIN
 	x := numeroDeOrdenes % 2;
@@ -452,13 +480,7 @@ BEGIN
 			WHEN x = 0 THEN
 				y := floor(random() * promedio) + 1;
 
-				SELECT id, price INTO to_insert_item_id, item_price
-				FROM item
-				ORDER BY random()
-				LIMIT 1;
-
-				INSERT INTO order_item (placed_order_id, item_id, quantity, price) 
-				VALUES (placed_id, to_insert_item_id, y, y*item_price);
+				CALL assignItemsToOrder(y, placed_id);
 
 				acc = acc + y;
 				count = count + 1;
@@ -466,13 +488,7 @@ BEGIN
 			ELSE
 				y := count*promedio - acc;
 
-				SELECT id, price INTO to_insert_item_id, item_price
-				FROM item
-				ORDER BY random()
-				LIMIT 1;
-
-				INSERT INTO order_item (placed_order_id, item_id, quantity, price) 
-				VALUES (placed_id, to_insert_item_id, y, y*item_price);
+				CALL assignItemsToOrder(y, placed_id);
 
 				acc = acc + y;
 				count = count + 1;
