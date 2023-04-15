@@ -73,6 +73,7 @@ INSERT INTO city (city_name, postal_code)
 INSERT INTO status_catalog (status_name)
 	VALUES
 		('order placed'),
+		('order confirmed'),
 		('in transit'),
 		('delivered');
 
@@ -108,12 +109,18 @@ DECLARE
 	status_order_placed_id INT;
 	status_in_transit_id INT;
 	status_delivered_id INT;
+	status_order_confirmed INT;
 	order_in_transit_time TIMESTAMP;
 	order_delivered_time TIMESTAMP;
+	order_confirmed_time TIMESTAMP;
 BEGIN
 	SELECT id INTO status_order_placed_id
 	FROM status_catalog
 	WHERE status_name = 'order placed';
+
+	SELECT id INTO status_order_confirmed
+	FROM status_catalog
+	WHERE status_name = 'order confirmed';
 
 	SELECT id INTO status_in_transit_id
 	FROM status_catalog
@@ -129,14 +136,28 @@ BEGIN
 	VALUES
 		(order_id, status_order_placed_id, order_inserted_time);
 
-	-- Si la orden tiene menos de 5 horas creadas, es solo placed
-	IF NOW() - INTERVAL '5 hours' < order_inserted_time THEN
+	-- Si la orden tiene menos de 1 hora creada, siempre es solo placed
+	IF NOW() - INTERVAL '1 hours' < order_inserted_time THEN
 		NULL;
+
+	-- Si la orden tiene menos de 5 hora creada, esta en confirmed
+	ELSIF NOW() - INTERVAL '5 hours' < order_inserted_time  THEN
+		INSERT INTO order_status 
+			(placed_order_id, status_catalog_id, status_time)
+		VALUES
+			(order_id, status_order_placed_id, order_inserted_time+RANDOM()* INTERVAL '4 HOURS');
 	-- Si la orden tiene menos de 5 dias creada, tiene 0.8 de probabilidad
 	-- de aun estar en 'in transit'
 	ELSIF NOW() - INTERVAL '5 days' < order_inserted_time 
 		AND RANDOM() < 0.8 THEN
-		order_in_transit_time := order_inserted_time + RANDOM()*INTERVAL '2 days';
+
+		order_confirmed_time := order_inserted_time +RANDOM()* INTERVAL '4 HOURS';
+		INSERT INTO order_status 
+			(placed_order_id, status_catalog_id, status_time)
+		VALUES
+			(order_id, status_order_confirmed, order_confirmed_time);
+
+		order_in_transit_time := order_confirmed_time + RANDOM()* INTERVAL '2 days';
 		INSERT INTO order_status 
 			(placed_order_id, status_catalog_id, status_time)
 		VALUES
@@ -146,7 +167,13 @@ BEGIN
 
 	-- Toda orden con mayor tiempo de creacion se guarda como entregada
 	ELSE 
-		order_in_transit_time := order_inserted_time + RANDOM()*INTERVAL '2 days';
+		order_confirmed_time := order_inserted_time +RANDOM()* INTERVAL '4 HOURS';
+		INSERT INTO order_status 
+			(placed_order_id, status_catalog_id, status_time)
+		VALUES
+			(order_id, status_order_confirmed, order_confirmed_time);
+
+		order_in_transit_time := order_confirmed_time + RANDOM()*INTERVAL '2 days';
 		INSERT INTO order_status 
 			(placed_order_id, status_catalog_id, status_time)
 		VALUES
