@@ -438,30 +438,42 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE PROCEDURE createOrderItems(promedio INT, numeroDeOrdenes INT) 
 AS $$
 DECLARE
-placed_id INT;
-x INT;
-acc INT := 0;
-count INT := 1;
-y INT;
+	placed_id INT;
+	x INT;
+	acc INT := 0;
+	count INT := 1;
+	y INT;
+	to_insert_item_id INT;
+	item_price decimal(10, 2);
 BEGIN
 	x := numeroDeOrdenes % 2;
 	FOR placed_id IN (SELECT id FROM placed_order) LOOP
 		CASE
 			WHEN x = 0 THEN
 				y := floor(random() * promedio) + 1;
-				FOR i IN 1..y LOOP
-					INSERT INTO order_item (placed_order_id, item_id, quantity, price) 
-					VALUES (placed_id, 1, 2.0, 2.0);
-				END LOOP;
+
+				SELECT id, price INTO to_insert_item_id, item_price
+				FROM item
+				ORDER BY random()
+				LIMIT 1;
+
+				INSERT INTO order_item (placed_order_id, item_id, quantity, price) 
+				VALUES (placed_id, to_insert_item_id, y, y*item_price);
+
 				acc = acc + y;
 				count = count + 1;
 				x := 1;
 			ELSE
 				y := count*promedio - acc;
-				FOR i IN 1..y LOOP
-					INSERT INTO order_item (placed_order_id, item_id, quantity, price) 
-					VALUES (placed_id, 1, 2.0, 2.0);
-				END LOOP;
+
+				SELECT id, price INTO to_insert_item_id, item_price
+				FROM item
+				ORDER BY random()
+				LIMIT 1;
+
+				INSERT INTO order_item (placed_order_id, item_id, quantity, price) 
+				VALUES (placed_id, to_insert_item_id, y, y*item_price);
+
 				acc = acc + y;
 				count = count + 1;
 				x := 0;
