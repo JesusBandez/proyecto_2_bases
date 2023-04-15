@@ -62,7 +62,7 @@ CREATE TABLE customer_personality (
 
 -- Insertar los datos de los .csv
 \copy city_aux FROM './CSVs/filtered_data_cities.csv' WITH DELIMITER ',' CSV HEADER;
-\copy last_name FROM './CSVs/filtered_data_names.csv' WITH DELIMITER ',' CSV HEADER;
+\copy last_name FROM './CSVs/last_names.csv' WITH DELIMITER ',' CSV HEADER;
 \copy first_name FROM './CSVs/names.csv' WITH DELIMITER ',' CSV HEADER;
 \copy street_aux FROM './CSVs/streets.csv' WITH DELIMITER ',' CSV HEADER;
 \copy item_aux FROM './CSVs/items.csv' WITH DELIMITER ',' CSV HEADER;

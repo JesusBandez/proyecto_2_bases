@@ -8,7 +8,7 @@ folder="https://raw.githubusercontent.com/JesusBandez/proyecto_2_bases/master/CS
 # Lista de nombres de archivos CSV
 files=(
     "filtered_data_cities.csv"
-    "filtered_data_names.csv"
+    "last_names.csv"
     "items.csv"
     "marcas.csv"
     "names.csv"
