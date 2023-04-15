@@ -513,7 +513,7 @@ BEGIN
 			---- crear box
 			-- choose item to insert
 			FOR item IN (
-				SELECT * FROM order_item oi
+				SELECT oi.item_id, oi.quantity FROM order_item oi
 				WHERE oi.placed_order_id = orden.id
 			) LOOP
 
@@ -536,14 +536,15 @@ BEGIN
 				
 				count := count + 1;
 				
-				---- crear item_in_box
-				
+				---- crear item_in_box				
 				--choose is_replacement
 				is_replacement_var := round(random());
 				
 				INSERT INTO item_in_box (box_id, item_id, quantity, is_replacement)
-				VALUES (box_id, item.id, item.quantity, is_replacement_var);
+				VALUES (box_id, item.item_id, item.quantity, is_replacement_var);
 				
+				
+
 			END LOOP;
 
 		END LOOP;
