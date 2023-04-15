@@ -9,7 +9,7 @@ with top5_orders as (
 		   JOIN order_item o ON p.id = o.placed_order_id
 		  )
 	)
-SELECT * 
+SELECT c.* 
 FROM Customer c
 JOIN top5_orders t ON c.id = t.customer_id
 
