@@ -1,12 +1,13 @@
 -- Query a
 with top5_orders as (
-	SELECT *
+	SELECT p.id, customer_id, SUM(o.price) as suma
 	FROM placed_order p
 	JOIN order_item o ON p.id = o.placed_order_id
 	JOIN order_status os ON os.placed_order_id = p.id
 	JOIN status_catalog s ON os.status_catalog_id = s.id
 	WHERE s.status_name ='order confirmed'
-	ORDER BY price desc
+	GROUP BY p.id, p.customer_id
+	ORDER BY suma desc
 	Limit (SELECT COUNT(*)*0.05
 		   FROM placed_order p
 		   JOIN order_item o ON p.id = o.placed_order_id
