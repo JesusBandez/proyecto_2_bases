@@ -516,7 +516,7 @@ BEGIN
 				SELECT * FROM order_item oi
 				WHERE oi.placed_order_id = orden.id
 			) LOOP
-				RAISE NOTICE 'Value: %', item;
+
 				
 				-- choose box_code
 				box_code_var := 'BX' || count;
