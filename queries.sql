@@ -1,7 +1,20 @@
+-- Query a
+with top5_orders as (
+	SELECT *
+	FROM placed_order p
+	JOIN order_item o ON p.id = o.placed_order_id
+	ORDER BY price desc
+	Limit (SELECT COUNT(*)*0.05
+		   FROM placed_order p
+		   JOIN order_item o ON p.id = o.placed_order_id
+		  )
+	)
+SELECT * 
+FROM Customer c
+JOIN top5_orders t ON c.id = t.customer_id
 
 
-
--- Query 2
+-- Query b
 SELECT c.*, avg(d.delivery_time_actual - os.status_time) as dispatch_time
 FROM placed_order po
 JOIN order_status os ON po.id = os.placed_order_id
@@ -12,7 +25,7 @@ GROUP BY c.id
 ORDER BY dispatch_time DESC
 LIMIT 5
 
--- Query 4
+-- Query d
 WITH items_dispatch_time as (
 	SELECT i.* , avg(d.delivery_time_actual - os.status_time) as dispatch_time
 	FROM item i
