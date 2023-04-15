@@ -134,7 +134,7 @@ CREATE TABLE item_in_box(
     box_id INT REFERENCES box (id) NOT NULL,
     item_id INT REFERENCES item (id) NOT NULL,
     quantity DECIMAL(10, 3) NOT NULL,
-    is_replacemen BOOLEAN NOT NULL
+    is_replacement BOOLEAN NOT NULL
 );
 
 
