@@ -1,10 +1,7 @@
 -- extension usada para generar passsword aleatorias 
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
--- RAISE NOTICE 'Value: %', deletedContactId;
 
--- ####################################################################
--- ########## PROBABLEMENTE TENDREMOS QUE ELIMINAR ESTO DESPUES #######
-\i create_tables.sql
+
 DROP TABLE IF EXISTS city_aux;
 DROP TABLE IF EXISTS last_name;
 DROP TABLE IF EXISTS first_name;
@@ -14,16 +11,17 @@ DROP TABLE IF EXISTS item_aux;
 DROP TABLE IF EXISTS brand_aux;
 DROP TABLE IF EXISTS customer_personality;
 
--- ####################################################################
--- ####################################################################
 
-
+-- Tabla donde se cargan los datos del .csv
+-- population se usan para dar peso a las ciudades con mayor poblacion
 CREATE TABLE city_aux (
     city VARCHAR(128) NOT NULL,
 	pupulation INT,
     zips VARCHAR(16) NOT NULL
 );
 
+
+-- Tabla para los nombres y apellidos que se usan para generar usuarios
 CREATE TABLE last_name (
     name VARCHAR(50) NOT NULL,
     count INTEGER   
@@ -33,10 +31,12 @@ CREATE TABLE first_name (
 	name VARCHAR(50) NOT NULL
 );
 
+-- Usada para crear los nombres de las calles
 CREATE TABLE street_aux (
 	name VARCHAR(50) NOT NULL
 );
 
+-- Tablas para generar los items
 CREATE TABLE item_aux (
 	name VARCHAR(255) NOT NULL,
 	unit VARCHAR(255) NOT NULL,
@@ -47,15 +47,20 @@ CREATE TABLE brand_aux (
 	name VARCHAR(255) NOT NULL
 );
 
+-- Tabla de numeros telefonicos
 CREATE TABLE phone_number_aux (
 	number VARCHAR(50) NOT NULL
 );
 
+-- Asocia los customer con una 'personalidad'.
+-- placed_orders_rate se usa para dar peso a  customers 
+-- para que aparezcan en mas ordenes que otros
 CREATE TABLE customer_personality (
 	id INT,
 	placed_orders_rate FLOAT
 );
 
+-- Insertar los datos de los .csv
 \copy city_aux FROM './CSVs/filtered_data_cities.csv' WITH DELIMITER ',' CSV HEADER;
 \copy last_name FROM './CSVs/filtered_data_names.csv' WITH DELIMITER ',' CSV HEADER;
 \copy first_name FROM './CSVs/names.csv' WITH DELIMITER ',' CSV HEADER;
@@ -250,29 +255,29 @@ DECLARE
 
 BEGIN	
 	FOR i IN 1..number_of_items LOOP
-		-- Choose product name
+		-- Elegir un nombre de producto al azar
 		SELECT name, unit INTO name_product, to_insert_unit_name
 		FROM item_aux
 		ORDER BY random()
 		LIMIT 1;
 
-		-- Choose brand name
+		-- Elegir un nombre de alguna marca
 		SELECT name INTO brand
 		FROM brand_aux
 		ORDER BY random()
 		LIMIT 1;
-
-		-- Create product name
+		
 		name_product := CONCAT(name_product, ' ',brand);		
 
-		-- Assign a random price
-		price := random()*100;
+		-- Asignar un precion aleatorio entre 0.1 y 100
+		price := random()*(100-0.1)+0.1;
 		
-		-- Assign unit
+		-- Asignar la unidad del producto.
 		SELECT id INTO unit_id
 		FROM unit
 		WHERE unit_name = to_insert_unit_name;
 		
+		-- Si la unidad no existe, insertarla
 		IF unit_id IS NULL THEN
 			INSERT INTO unit ( unit_name )
 			VALUES ( to_insert_unit_name )
@@ -323,49 +328,44 @@ BEGIN
 	
 	--insertar Customers
 	FOR i IN 1..number_of_customers LOOP
-		-- choose first_name
+		-- Primer nombre
 		SELECT name INTO nombreCliente
 		FROM first_name
 		ORDER BY random()
 		LIMIT 1;
 		
-		-- choose last_name
+		-- Apellido
 		SELECT name INTO apellidoCliente
 		FROM last_name
 		ORDER BY random()
 		LIMIT 1;
 		
-		-- choose username
+		-- Generar un username unico
 		username := nombreCliente || apellidoCliente ||i;
 		
-		-- choose password 
+		-- Generar contrasenia
 		pw := substr(md5(random()::text), 1, 8); -- generar contraseña de 8 caracteres
 
-        -- choose time_inserted
-		days_offset := floor(random() * 365);
-		hours_offset := floor(random() * 24);
-		minutes_offset := floor(random() * 60);
-		time_inserted := date_trunc(
-			'minute', 
-			timestamp_value + days_offset * INTERVAL '1 DAY' + hours_offset * INTERVAL '1 HOUR' + minutes_offset * INTERVAL '1 MINUTE'
-		);
+        -- Asignar tiempo insertado en la bbdd
+		time_inserted := NOW() - RANDOM() * INTERVAL '10 MONTHS';
 		
-		-- choose time_confirmed
-		time_confirmed := time_inserted + INTERVAL '1 HOUR';
+		-- Tiempo de confimacion de mail
+		time_confirmed := time_inserted + RANDOM()*INTERVAL '1 HOUR';
 		
-		-- choose confirmation_code
+		-- codigo de confirmacion
 		code := substr(md5(random()::text), 1, 4);
 		
-		-- choose email
+		-- generar email
 		email := nombreCliente || apellidoCliente ||i*10 || '@gmail.com';
 		
-		-- choose phone number
+		-- elegir un numero de tlf
 		SELECT number INTO phone_number
 		FROM phone_number_aux
 		ORDER BY random()
 		LIMIT 1;
 		
-		-- choose city_id
+		-- Elegir una ciudad para el customer. Las ciudades con mayor poblacion
+		-- tiene mas probabilidad de ser elegidas.
 		SELECT id INTO city_id
 		FROM city
 		Where city_name = (
@@ -375,7 +375,7 @@ BEGIN
 			LIMIT 1
 		);
 		
-		-- choose address
+		-- Generar direccion
 		SELECT name INTO calle
 		FROM street_aux
 		ORDER BY random()
@@ -413,13 +413,13 @@ DECLARE
 
 BEGIN
 	FOR i IN 1..number_of_employees LOOP
-		-- choose first_name
+		-- Elegir nombre
 		SELECT name INTO name_employee
 		FROM first_name
 		ORDER BY random()
 		LIMIT 1;
 		
-		-- choose last_name
+		-- Apellido
 		SELECT name INTO last_name_employee
 		FROM last_name
 		ORDER BY random()
@@ -448,8 +448,8 @@ BEGIN
 	WHILE items_added < total_number_items_to_add LOOP
 		items_to_add := RANDOM()*((total_number_items_to_add-items_added)-1)+1;
 		
-		-- Se selecciona un item aleatorio para guardarlo 'items_to_add' veces
-		-- el precio del item influye en su probabilidad de ser elegido
+		-- Se selecciona un item aleatorio para guardarlo 'items_to_add' veces.
+		-- El precio del item influye en su probabilidad de ser elegido.
 		SELECT * INTO item
 		FROM item
 		ORDER BY random()+(price/100)*0.3
@@ -462,7 +462,8 @@ BEGIN
 	END LOOP;
 END
 $$ LANGUAGE plpgsql;
--- Procedimiento para asignar los items a las ordenes
+-- Procedimiento para asignar los items a las ordenes garantizando que se cumpla
+-- el numero de items promedio por orden
 CREATE OR REPLACE PROCEDURE createOrderItems(promedio INT, numeroDeOrdenes INT) 
 AS $$
 DECLARE
@@ -563,14 +564,9 @@ BEGIN
 				END IF;
 				
 				INSERT INTO item_in_box (box_id, item_id, quantity, is_replacement)
-				VALUES (box_id, item.item_id, item.quantity, is_replacement_var);
-				
-				
-
+				VALUES (box_id, item.item_id, item.quantity, is_replacement_var);				
 			END LOOP;
-
-		END LOOP;
-				 
+		END LOOP;				 
 	END LOOP;
 END
 $$ LANGUAGE plpgsql;
