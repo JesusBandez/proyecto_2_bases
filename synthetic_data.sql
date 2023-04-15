@@ -486,13 +486,12 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE PROCEDURE createBox() 
 AS $$
 DECLARE
-	box_id_var INTEGER;
-	item_id_var INTEGER;
+	box_id INTEGER;
 	quantity_var DECIMAL;
 	is_replacement_var BOOL;
 	orden RECORD;
 	deliv RECORD;
-	
+	item RECORD;
 	box_code_var VARCHAR;
 	deivery_id_var INTEGER;
 	employee_id_var INTEGER;
@@ -500,50 +499,53 @@ DECLARE
 	count INTEGER := 0;
 BEGIN
 
-	FOR orden IN (SELECT * From placed_order as p CROSS JOIN Order_status o CROSS JOIN status_catalog s
-				 WHERE p.id = o.placed_order_id AND o.status_catalog_id = s.id AND s.status_name = 'in transit') LOOP
+	FOR orden IN (
+		SELECT * From placed_order p 
+		JOIN Order_status o on p.id = o.placed_order_id
+		JOIN status_catalog s on o.status_catalog_id = s.id
+		WHERE s.status_name = 'in transit'
+		) LOOP
 				 
-		FOR deliv IN (SELECT * FROM delivery d WHERE d.placeD_order_id = orden.id) LOOP
+		FOR deliv IN (
+			SELECT d.id FROM delivery d
+		 	WHERE d.placeD_order_id = orden.id
+			) LOOP
 			---- crear box
-			
-			-- choose box_code
-			box_code_var := 'BX' || count;
-			
-			-- choose deivery_id
-			deivery_id_var := deliv.id;
-			
-			-- choose employee_id
-			SELECT id INTO employee_id_var
-			FROM employee
-			ORDER BY random()
-			LIMIT 1;
-			
-			INSERT INTO Box (box_code, delivery_id, employee_id)
-			VALUES (box_code_var, deivery_id_var, employee_id_var);
-			
-			count := count + 1;
-			
-			---- crear item_in_box
-			-- choose box_id
-			SELECT id INTO box_id_var
-			FROM Box
-			WHERE Box.box_code = box_code_var
-			LIMIT 1;
-			
-			-- choose item_id
-			SELECT id INTO item_id_var
-			FROM item
-			ORDER BY random()
-			LIMIT 1;
-			
-			--choose quantity
-			quantity_var := (random() * 9.9) + 1.0;
-			
-			--choose is_replacement
-			is_replacement_var := round(random());
-			
-			INSERT INTO item_in_box (box_id, item_id, quantity, is_replacement)
-			VALUES (box_id_var, item_id_var, quantity_var, is_replacement_var);
+			-- choose item to insert
+			FOR item IN (
+				SELECT * FROM order_item oi
+				WHERE oi.placed_order_id = orden.id
+			) LOOP
+				RAISE NOTICE 'Value: %', item;
+				
+				-- choose box_code
+				box_code_var := 'BX' || count;
+				
+				-- choose deivery_id
+				deivery_id_var := deliv.id;
+				
+				-- choose employee_id
+				SELECT id INTO employee_id_var
+				FROM employee
+				ORDER BY random()
+				LIMIT 1;
+				
+				INSERT INTO Box (box_code, delivery_id, employee_id)
+				VALUES (box_code_var, deivery_id_var, employee_id_var)
+				RETURNING id INTO box_id;
+				
+				count := count + 1;
+				
+				---- crear item_in_box
+				
+				--choose is_replacement
+				is_replacement_var := round(random());
+				
+				INSERT INTO item_in_box (box_id, item_id, quantity, is_replacement)
+				VALUES (box_id, item.id, item.quantity, is_replacement_var);
+				
+			END LOOP;
+
 		END LOOP;
 				 
 	END LOOP;
