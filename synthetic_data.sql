@@ -16,7 +16,7 @@ DROP TABLE IF EXISTS customer_personality;
 -- population se usan para dar peso a las ciudades con mayor poblacion
 CREATE TABLE city_aux (
     city VARCHAR(128) NOT NULL,
-	pupulation INT,
+	population INT,
     zips VARCHAR(16) NOT NULL
 );
 
@@ -371,7 +371,7 @@ BEGIN
 		Where city_name = (
 			Select city
 			FROM city_aux
-			ORDER BY pupulation*random() DESC
+			ORDER BY population*random() DESC
 			LIMIT 1
 		);
 		
