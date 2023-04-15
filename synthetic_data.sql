@@ -494,9 +494,11 @@ DECLARE
 	item RECORD;
 	box_code_var VARCHAR;
 	deivery_id_var INTEGER;
-	employee_id_var INTEGER;
-	
+	employee_id_var INTEGER;	
 	count INTEGER := 0;
+
+	-- Probabilidad de que el articulo sea un reemplazo
+	is_replacement_prob FLOAT := 0.01;
 BEGIN
 
 	FOR orden IN (
@@ -510,8 +512,8 @@ BEGIN
 			SELECT d.id FROM delivery d
 		 	WHERE d.placeD_order_id = orden.id
 			) LOOP
-			---- crear box
-			-- choose item to insert
+			---- crear box y asociarla con delivery
+
 			FOR item IN (
 				SELECT oi.item_id, oi.quantity FROM order_item oi
 				WHERE oi.placed_order_id = orden.id
@@ -537,8 +539,12 @@ BEGIN
 				count := count + 1;
 				
 				---- crear item_in_box				
-				--choose is_replacement
-				is_replacement_var := round(random());
+				--
+				IF RANDOM() < (1 - is_replacement_prob) THEN
+					is_replacement_var := FALSE;
+				ELSE 
+					is_replacement_var := TRUE;
+				END IF;
 				
 				INSERT INTO item_in_box (box_id, item_id, quantity, is_replacement)
 				VALUES (box_id, item.item_id, item.quantity, is_replacement_var);
